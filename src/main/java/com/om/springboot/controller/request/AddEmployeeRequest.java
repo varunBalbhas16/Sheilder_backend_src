@@ -7,33 +7,21 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BusinessProfileRequest {
+public class AddEmployeeRequest {
     @NotEmpty(message = "{constraints.NotEmpty.message}")
-    @Size(min = 1, max = 50)
-    private String firstName;
+    @Size(min = 1, max = 20)
+    private String employeeId;
 
     @NotEmpty(message = "{constraints.NotEmpty.message}")
     @Size(min = 1, max = 50)
-    private String lastName;
-
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
-    @Size(min = 1, max = 15)
-    private String gender;
-
-    private Date dob;
-
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
-    @Size(min = 1, max = 45)
-    private String country;
+    private String name;
 
     @NotEmpty(message = "{constraints.NotEmpty.message}")
     @Size(min = 1, max = 10)
@@ -48,28 +36,7 @@ public class BusinessProfileRequest {
     private String emailId;
 
     @NotEmpty(message = "{constraints.NotEmpty.message}")
-    @Size(min = 1, max = 30)
-    private String company;
-
-    @NotNull
-    private Long regId;
-
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
-    @Size(min = 1, max = 30)
-    private String gsaNumber;
-
-    @NotNull
-    private Long employeeCount;
-
-    @NotNull
-    private int isAdmin;
-
-    private String anotherAdminName;
-
-
     @Size(min = 1, max = 15)
-    private String anotherAdminMobileNumber;
-
-    private String anotherAdminEmailId;
+    private String adminMobileNumber;
 
 }

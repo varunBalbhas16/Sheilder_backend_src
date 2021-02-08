@@ -3,7 +3,7 @@ package com.om.springboot.model.user;
 import com.om.springboot.model.audit.DateAudit;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Primary;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -43,7 +43,11 @@ public class BusinessProfile extends DateAudit {
     private String country;
 
     @NotEmpty
-    @Size(min = 1, max = 20)
+    @Size(min=1,max=10)
+    private String countryCode;
+
+    @NotEmpty
+    @Size(min = 1, max = 15)
     private String mobileNumber;
 
     @NotEmpty

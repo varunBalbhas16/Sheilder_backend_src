@@ -1,0 +1,27 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.om.springboot.mappers.user.AdminMapper">
+    <resultMap id="AdminMapperResultMap" type="com.om.springboot.model.user.Admin">
+        <id column="ID" property="id"/>
+        <result column="USERID" property="userId"/>
+        <result column="NAME" property="name"/>
+        <result column="MOBILE" property="mobile"/>
+        <result column="EMAIL" property="email"/>
+        <result column="COMPANY" property="company"/>
+    </resultMap>
+
+    <insert id="insertAdminDetails" parameterType="com.om.springboot.model.user.Admin">
+        INSERT INTO ADMIN(ID,USERID,NAME,MOBILE,EMAIL,COMPANY)
+        VALUES
+        (#{id},#{userId},#{name},#{mobile},#{email},#{company})
+    </insert>
+
+    <select id="adminExistByMobAndCompany" resultType="Boolean">
+        SELECT ID,USERID,NAME,MOBILE,EMAIL,COMPANY FROM ADMIN
+        WHERE
+        MOBILE=#{mobile}
+        AND
+        COMPANY=#{company}
+    </select>
+</mapper>

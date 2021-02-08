@@ -1,0 +1,52 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.user.UserAuthenticationMapper">
+    <resultMap id="UserAuthenticationResultMap" type="com.om.springboot.model.user.UserAuthentication">
+        <id column="ID" property="id"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="MOBILE" property="mobile"/>
+        <result column="IS_LOGGEDIN" property="isLoggedIn"/>
+        <result column="OTP" property="otp"/>
+        <result column="LOGIN_TIME" property="loginTime"/>
+        <result column="LOGOUT_TIME" property="logoutTime"/>
+    </resultMap>
+
+    <insert id="initialLogin" parameterType="com.om.springboot.model.user.UserAuthentication">
+        INSERT INTO USER_AUTHENTICATION(ID,USER_ID,MOBILE,IS_LOGGEDIN,OTP,LOGIN_TIME,LOGOUT_TIME)
+        VALUES(#{id},#{userId},#{mobile},#{isLoggedIn},#{otp},#{loginTime},#{logoutTime});
+    </insert>
+
+    <select id="getAuthenticationDetails" resultMap="UserAuthenticationResultMap">
+        SELECT ID,USER_ID,MOBILE,IS_LOGGEDIN,OTP,LOGIN_TIME,LOGOUT_TIME
+        FROM
+        USER_AUTHENTICATION
+        WHERE
+        MOBILE=#{mobile};
+    </select>
+
+    <update id="login" parameterType="com.om.springboot.model.user.UserAuthentication">
+        UPDATE USER_AUTHENTICATION
+        SET
+        IS_LOGGEDIN=#{isLoggedIn},
+        OTP=#{otp},
+        LOGIN_TIME=#{loginTime}
+        WHERE
+        USER_ID=#{userId}
+        AND
+        MOBILE=#{mobile}
+    </update>
+
+    <update id="logout" parameterType="com.om.springboot.model.user.UserAuthentication">
+        UPDATE USER_AUTHENTICATION
+        SET
+        IS_LOGGEDIN=#{isLoggedIn},
+        LOGOUT_TIME=#{logoutTime}
+        WHERE
+        USER_ID=#{userId}
+        AND
+        MOBILE=#{mobile}
+    </update>
+
+</mapper>

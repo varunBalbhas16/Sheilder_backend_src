@@ -10,6 +10,7 @@
         <result column="GENDER" property="gender"/>
         <result column="DOB" property="dob"/>
         <result column="COUNTRY" property="country"/>
+        <result column="COUNTRY_CODE" property="countryCode"/>
         <result column="MOBILE_NUMBER" property="mobileNumber"/>
         <result column="EMAIL_ID" property="emailId"/>
         <result column="COMPANY" property="company"/>
@@ -22,18 +23,40 @@
 
     <insert id="insertRegisterDetail" parameterType="com.om.springboot.model.user.BusinessProfile">
         INSERT INTO BUSINESS_PROFILE
-        (USER_ID,FIRST_NAME,LAST_NAME,GENDER,DOB,COUNTRY,MOBILE_NUMBER,EMAIL_ID,COMPANY,REG_ID,GSA_NUMBER,
+        (USER_ID,FIRST_NAME,LAST_NAME,GENDER,DOB,COUNTRY,COUNTRY_CODE,MOBILE_NUMBER,EMAIL_ID,COMPANY,REG_ID,GSA_NUMBER,
         EMPLOYEE_COUNT,IS_ADMIN)
         VALUES (
-        #{id},#{firstName},#{lastName},#{gender},#{dob},#{country},#{mobileNumber},
+        #{id},#{firstName},#{lastName},#{gender},#{dob},#{country},#{countryCode},#{mobileNumber},
         #{emailId},#{company},#{regId},#{gsaNumber},#{employeeCount},#{isAdmin}
         );
     </insert>
 
-    <select id="existByMobile" resultType="Boolean">
-        SELECT USER_ID,FIRST_NAME,LAST_NAME,GENDER,DOB,COUNTRY,
+    <select id="getBusinessDetail" resultMap="BusinessProfileResultMap">
+        SELECT USER_ID,FIRST_NAME,LAST_NAME,GENDER,DOB,COUNTRY,COUNTRY_CODE,
         MOBILE_NUMBER,EMAIL_ID,COMPANY,REG_ID,GSA_NUMBER,EMPLOYEE_COUNT,IS_ADMIN FROM BUSINESS_PROFILE
         WHERE
-        MOBILE_NUMBER=#{mobileNumber}
+        MOBILE_NUMBER=#{mobileNumber};
+    </select>
+
+    <select id="existByMobile" resultType="Boolean">
+        SELECT USER_ID,FIRST_NAME,LAST_NAME,GENDER,DOB,COUNTRY,COUNTRY_CODE,
+        MOBILE_NUMBER,EMAIL_ID,COMPANY,REG_ID,GSA_NUMBER,EMPLOYEE_COUNT,IS_ADMIN FROM BUSINESS_PROFILE
+        WHERE
+        MOBILE_NUMBER=#{mobileNumber};
+    </select>
+
+    <select id="existByCompany" resultType="Boolean">
+        SELECT USER_ID,FIRST_NAME,LAST_NAME,GENDER,DOB,COUNTRY,COUNTRY_CODE,
+        MOBILE_NUMBER,EMAIL_ID,COMPANY,REG_ID,GSA_NUMBER,EMPLOYEE_COUNT,IS_ADMIN FROM BUSINESS_PROFILE
+        WHERE
+        COMPANY=#{company};
+    </select>
+
+    <select id="getUserId" resultType="Long">
+        SELECT USER_ID
+        FROM
+        BUSINESS_PROFILE
+        WHERE
+        MOBILE_NUMBER=#{mobileNumber};
     </select>
 </mapper>

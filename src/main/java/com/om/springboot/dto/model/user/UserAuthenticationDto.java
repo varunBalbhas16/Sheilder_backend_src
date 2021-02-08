@@ -9,6 +9,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -18,20 +19,18 @@ import javax.validation.constraints.Size;
 @ToString
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AnotherAdminDto {
-    @NotEmpty(message = "{constraints.NotEmpty.message}")
-    @Size(min = 1, max = 50)
-    private String anotherAdminName;
+public class UserAuthenticationDto {
 
-    @NotEmpty
-    private String anotherAdminMobCountryCode;
+    Long userId;
 
     @NotEmpty(message = "{constraints.NotEmpty.message}")
-    @Size(min = 1, max = 20)
-    private String anotherAdminMobileNumber;
+    @Size(min = 1, max = 15)
+    String mobile;
+
+    @NotNull
+    int isLoggedIn;
 
     @NotEmpty(message = "{constraints.NotEmpty.message}")
-    @Size(min = 1, max = 50)
-    private String anotherAdminEmailId;
-
+    @Size(min = 1, max = 6)
+    String otp;
 }

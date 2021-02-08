@@ -1,0 +1,46 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.user.OtpMapper">
+    <resultMap id="OtpResultMap" type="com.om.springboot.model.user.Otp">
+        <id column="ID" property="id"/>
+        <result column="MOBILE_NUMBER" property="mobileNumber"/>
+        <result  column="OTP" property="otp"/>
+        <result column="CREATED_ON" property="createdOn"/>
+        <result column="RESENT_ON" property="resentOn"/>
+        <result column="RESENT_COUNT" property="resentCount"/>
+    </resultMap>
+
+    <insert id="insertOtp" parameterType="com.om.springboot.model.user.Otp">
+        INSERT INTO OTP(ID,MOBILE_NUMBER,OTP,CREATED_ON,RESENT_ON,RESENT_COUNT)
+        VALUES
+        (#{id},#{mobileNumber},#{otp},#{createdOn},#{resentOn},#{resentCount})
+    </insert>
+    <update id="updateOtp" parameterType="com.om.springboot.model.user.Otp">
+        UPDATE OTP
+        SET
+        OTP=#{otp},
+        CREATED_ON=#{createdOn},
+        RESENT_ON=#{resentOn},
+        RESENT_COUNT=#{resentCount}
+        WHERE
+        ID=#{id}
+        AND
+        MOBILE_NUMBER=#{mobileNumber};
+    </update>
+    <select id="existByMobile" resultType="Boolean">
+        SELECT ID,MOBILE_NUMBER,OTP,CREATED_ON,RESENT_ON,RESENT_COUNT
+        FROM
+        OTP
+        WHERE
+        MOBILE_NUMBER=#{mobileNumber};
+
+    </select>
+    <select id="getOtpDetails" resultMap="OtpResultMap">
+        SELECT ID,MOBILE_NUMBER,OTP,CREATED_ON,RESENT_ON,RESENT_COUNT
+        FROM OTP
+        WHERE
+        MOBILE_NUMBER=#{mobileNumber};
+    </select>
+</mapper>

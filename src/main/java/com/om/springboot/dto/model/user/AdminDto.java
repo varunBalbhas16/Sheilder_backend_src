@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -19,39 +18,22 @@ import java.util.Date;
 @ToString
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BusinessProfileDto {
+public class AdminDto {
 
-    private Long userId;
+    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @Size(min = 1, max = 100)
+    private String adminName;
 
-    private String firstName;
-
-    private String lastName;
-
-
-    private String gender;
-
-    private Date dob;
-
-    private String country;
-
-    private String countryCode;
-
-    private String mobileNumber;
-
-
-
-    private String emailId;
-
-
+    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @Size(min = 1, max = 15)
+    private String adminMobileNumber;
+    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @Size(min = 1, max = 100)
     private String company;
+    @NotEmpty(message = "{constraints.NotEmpty.message}")
+    @Size(min = 1, max = 50)
+    private String adminEmailId;
 
-
-    private Long regId;
-
-    private String gsaNumber;
-
-    private Long employeeCount;
-
-    private int isAdmin;
+    Long userId;
 
 }

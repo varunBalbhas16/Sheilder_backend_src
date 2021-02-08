@@ -1,0 +1,8 @@
+package com.om.springboot.service.user;
+
+import com.om.springboot.dto.model.user.AdminDto;
+
+public interface AdminService {
+    Boolean insertAdmin(AdminDto adminDto);
+    Boolean existByMobileNumberAndCompany(String mobileNumber,String country);
+}
