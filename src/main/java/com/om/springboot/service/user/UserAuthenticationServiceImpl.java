@@ -19,7 +19,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     @Override
     public Boolean initialLogin(UserAuthenticationDto userAuthenticationDto) {
         UserAuthentication userAuthentication = new UserAuthentication();
-        userAuthentication.setUserId(userAuthenticationDto.getUserId());
+        userAuthentication.setAdminId(userAuthenticationDto.getAdminId());
         userAuthentication.setIsLoggedIn(userAuthenticationDto.getIsLoggedIn());
         userAuthentication.setMobile(userAuthenticationDto.getMobile());
         userAuthentication.setLoginTime(Instant.now());
@@ -35,10 +35,11 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     @Override
     public Boolean login(UserAuthenticationDto userAuthenticationDto) {
         UserAuthentication userAuthentication = new UserAuthentication();
-        userAuthentication.setUserId(userAuthenticationDto.getUserId());
+        userAuthentication.setAdminId(userAuthenticationDto.getAdminId());
         userAuthentication.setIsLoggedIn(userAuthenticationDto.getIsLoggedIn());
         userAuthentication.setMobile(userAuthenticationDto.getMobile());
         userAuthentication.setLoginTime(Instant.now());
+        userAuthentication.setLogoutTime(null);
         userAuthentication.setOtp(userAuthenticationDto.getOtp());
         Boolean isLoggedIn = userAuthenticationMapper.login(userAuthentication);
         if (null == isLoggedIn || !isLoggedIn) {
@@ -51,7 +52,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     @Override
     public Boolean logout(UserAuthenticationDto userAuthenticationDto) {
         UserAuthentication userAuthentication = new UserAuthentication();
-        userAuthentication.setUserId(userAuthenticationDto.getUserId());
+        userAuthentication.setAdminId(userAuthenticationDto.getAdminId());
         userAuthentication.setIsLoggedIn(userAuthenticationDto.getIsLoggedIn());
         userAuthentication.setMobile(userAuthenticationDto.getMobile());
         userAuthentication.setLogoutTime(Instant.now());

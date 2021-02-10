@@ -4,5 +4,7 @@ import com.om.springboot.dto.model.user.AdminDto;
 
 public interface AdminService {
     Boolean insertAdmin(AdminDto adminDto);
-    Boolean existByMobileNumberAndCompany(String mobileNumber,String country);
+    AdminDto getAdminDetails(String mobile);
+    Boolean adminByMobileNumberAndCompany(String mobileNumber,String country);
+    Boolean adminByMobile(String mobileNumber);
 }

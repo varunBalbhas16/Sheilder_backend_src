@@ -5,7 +5,7 @@
 <mapper namespace="com.om.springboot.mappers.user.UserAuthenticationMapper">
     <resultMap id="UserAuthenticationResultMap" type="com.om.springboot.model.user.UserAuthentication">
         <id column="ID" property="id"/>
-        <result column="USER_ID" property="userId"/>
+        <result column="ADMIN_ID" property="adminId"/>
         <result column="MOBILE" property="mobile"/>
         <result column="IS_LOGGEDIN" property="isLoggedIn"/>
         <result column="OTP" property="otp"/>
@@ -14,12 +14,12 @@
     </resultMap>
 
     <insert id="initialLogin" parameterType="com.om.springboot.model.user.UserAuthentication">
-        INSERT INTO USER_AUTHENTICATION(ID,USER_ID,MOBILE,IS_LOGGEDIN,OTP,LOGIN_TIME,LOGOUT_TIME)
-        VALUES(#{id},#{userId},#{mobile},#{isLoggedIn},#{otp},#{loginTime},#{logoutTime});
+        INSERT INTO USER_AUTHENTICATION(ID,ADMIN_ID,MOBILE,IS_LOGGEDIN,OTP,LOGIN_TIME,LOGOUT_TIME)
+        VALUES(#{id},#{adminId},#{mobile},#{isLoggedIn},#{otp},#{loginTime},#{logoutTime});
     </insert>
 
     <select id="getAuthenticationDetails" resultMap="UserAuthenticationResultMap">
-        SELECT ID,USER_ID,MOBILE,IS_LOGGEDIN,OTP,LOGIN_TIME,LOGOUT_TIME
+        SELECT ID,ADMIN_ID,MOBILE,IS_LOGGEDIN,OTP,LOGIN_TIME,LOGOUT_TIME
         FROM
         USER_AUTHENTICATION
         WHERE
@@ -33,7 +33,7 @@
         OTP=#{otp},
         LOGIN_TIME=#{loginTime}
         WHERE
-        USER_ID=#{userId}
+        ADMIN_ID=#{adminId}
         AND
         MOBILE=#{mobile}
     </update>
@@ -44,7 +44,7 @@
         IS_LOGGEDIN=#{isLoggedIn},
         LOGOUT_TIME=#{logoutTime}
         WHERE
-        USER_ID=#{userId}
+        ADMIN_ID=#{adminId}
         AND
         MOBILE=#{mobile}
     </update>

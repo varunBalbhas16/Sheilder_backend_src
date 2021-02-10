@@ -29,6 +29,19 @@
         AND
         MOBILE_NUMBER=#{mobileNumber};
     </update>
+
+    <update id="updateOtpWRC" parameterType="com.om.springboot.model.user.Otp">
+        UPDATE OTP
+        SET
+        OTP=#{otp},
+        CREATED_ON=#{createdOn},
+        RESENT_COUNT=#{resentCount}
+        WHERE
+        ID=#{id}
+        AND
+        MOBILE_NUMBER=#{mobileNumber};
+    </update>
+
     <select id="existByMobile" resultType="Boolean">
         SELECT ID,MOBILE_NUMBER,OTP,CREATED_ON,RESENT_ON,RESENT_COUNT
         FROM
@@ -42,5 +55,9 @@
         FROM OTP
         WHERE
         MOBILE_NUMBER=#{mobileNumber};
+    </select>
+
+    <select id="otpTimeout" resultType="Boolean">
+
     </select>
 </mapper>

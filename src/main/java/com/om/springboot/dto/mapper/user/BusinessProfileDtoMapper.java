@@ -5,6 +5,9 @@ import com.om.springboot.model.user.BusinessProfile;
 
 public class BusinessProfileDtoMapper {
     public static BusinessProfileDto toDto(BusinessProfile businessProfile){
+        if(null==businessProfile){
+            return null;
+        }
         return new BusinessProfileDto()
                 .setUserId(businessProfile.getId())
                 .setFirstName(businessProfile.getFirstName())

@@ -1,4 +1,4 @@
-package com.om.springboot.controller.request.auth;
+package com.om.springboot.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

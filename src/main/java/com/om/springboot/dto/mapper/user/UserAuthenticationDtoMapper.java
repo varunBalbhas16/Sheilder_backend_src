@@ -9,7 +9,7 @@ public class UserAuthenticationDtoMapper {
             return null;
         }
         return new UserAuthenticationDto()
-                .setUserId(userAuthentication.getUserId())
+                .setAdminId(userAuthentication.getAdminId())
                 .setMobile(userAuthentication.getMobile())
                 .setOtp(userAuthentication.getOtp())
                 .setIsLoggedIn(userAuthentication.getIsLoggedIn());

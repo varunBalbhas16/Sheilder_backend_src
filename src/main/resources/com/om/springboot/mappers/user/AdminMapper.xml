@@ -4,7 +4,6 @@
 <mapper namespace="com.om.springboot.mappers.user.AdminMapper">
     <resultMap id="AdminMapperResultMap" type="com.om.springboot.model.user.Admin">
         <id column="ID" property="id"/>
-        <result column="USERID" property="userId"/>
         <result column="NAME" property="name"/>
         <result column="MOBILE" property="mobile"/>
         <result column="EMAIL" property="email"/>
@@ -12,16 +11,28 @@
     </resultMap>
 
     <insert id="insertAdminDetails" parameterType="com.om.springboot.model.user.Admin">
-        INSERT INTO ADMIN(ID,USERID,NAME,MOBILE,EMAIL,COMPANY)
+        INSERT INTO ADMIN(ID,NAME,MOBILE,EMAIL,COMPANY)
         VALUES
-        (#{id},#{userId},#{name},#{mobile},#{email},#{company})
+        (#{id},#{name},#{mobile},#{email},#{company})
     </insert>
 
+    <select id="getAdmin" resultMap="AdminMapperResultMap">
+        SELECT ID,NAME,MOBILE,EMAIL,COMPANY FROM ADMIN
+        WHERE
+        MOBILE=#{mobile}
+    </select>
+
     <select id="adminExistByMobAndCompany" resultType="Boolean">
-        SELECT ID,USERID,NAME,MOBILE,EMAIL,COMPANY FROM ADMIN
+        SELECT ID,NAME,MOBILE,EMAIL,COMPANY FROM ADMIN
         WHERE
         MOBILE=#{mobile}
         AND
         COMPANY=#{company}
+    </select>
+
+    <select id="existByMobile" resultType="Boolean">
+        SELECT ID,NAME,MOBILE,EMAIL,COMPANY FROM ADMIN
+        WHERE
+        MOBILE=#{mobile};
     </select>
 </mapper>

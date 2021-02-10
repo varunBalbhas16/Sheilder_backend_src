@@ -83,7 +83,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js")
                 .permitAll()
                 .antMatchers("/api/auth/**","/test1/**","/api/shielder/postLogin/businessProfileRegisteration/**","/api/shielder/login/otp/**",
-                        "/api/shielder/login/validateOtp/**")
+                        "/api/shielder/login/validateOtp/**","/api/shielder/postLogin/addEmployee","/api/shielder/postLogin/getEmployee/{adminMobileNumber}",
+                        "/api/shielder/postLogin/sendOtp","/api/shielder/logout")
                 .permitAll()
                 .antMatchers("/test/**","/api/auth/**","/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()

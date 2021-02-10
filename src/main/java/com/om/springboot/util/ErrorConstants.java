@@ -9,7 +9,12 @@ public enum ErrorConstants {
     E106("Otp hasn't been generated for that particular mobile number"),
     E107("Otp mismatched.Enter the correct otp"),
     E108("User is not Logged In.Please Login and Proceed"),
-    E109("Please Register your Business and Proceed");
+    E109("Please Register your Business and Proceed"),
+    E110("You are not seems to be admin for this organisation"),
+    E111("Details failed to upload"),
+    E112("Employee already registered"),
+    E113("Add employees and proceed"),
+    E114("You are not logged out.Log out and try Log in");
 
 
     private String value;

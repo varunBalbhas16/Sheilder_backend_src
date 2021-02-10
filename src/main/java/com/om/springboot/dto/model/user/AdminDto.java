@@ -34,6 +34,7 @@ public class AdminDto {
     @Size(min = 1, max = 50)
     private String adminEmailId;
 
-    Long userId;
+
+    Long adminId;
 
 }

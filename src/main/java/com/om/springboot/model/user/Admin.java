@@ -34,5 +34,5 @@ public class Admin extends DateAudit {
     @Size(min = 1, max = 50)
     private String email;
 
-    private Long userId;
+
 }

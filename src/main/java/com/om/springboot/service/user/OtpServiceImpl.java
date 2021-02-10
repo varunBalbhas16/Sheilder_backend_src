@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.KeyGenerator;
+import javax.transaction.Transactional;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -45,7 +46,8 @@ public class OtpServiceImpl implements OtpService {
 
 
     @Override
-    public String insertOtp(String mobileNumber) {
+    @Transactional
+    public synchronized String insertOtp(String mobileNumber) {
         Otp otp = new Otp();
         otp.setMobileNumber(mobileNumber);
         otp.setOtp(this.generateSixDigitInteger());
@@ -59,7 +61,25 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Override
-    public String updateOtp(String mobileNumber) {
+    @Transactional
+    public synchronized String updateOtpWRC(String mobileNumber){
+        Otp otp = new Otp();
+        Otp model=otpMapper.getOtpDetails(mobileNumber);
+        otp.setId(model.getId());
+        otp.setMobileNumber(mobileNumber);
+        otp.setOtp(this.generateSixDigitInteger());
+        otp.setCreatedOn(Instant.now());
+        otp.setResentCount(0L);
+        Boolean isInserted = otpMapper.updateOtpWRC(otp);
+        if (null != isInserted && isInserted) {
+            return otp.getOtp();
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public synchronized String updateOtp(String mobileNumber) {
         Otp otp = new Otp();
         Otp model=otpMapper.getOtpDetails(mobileNumber);
         Long count=model.getResentCount();

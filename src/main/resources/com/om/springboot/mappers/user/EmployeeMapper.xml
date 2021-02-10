@@ -1,0 +1,51 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.user.EmployeeMapper">
+    <resultMap id="EmployeeProfileResultMap" type="com.om.springboot.model.user.Employee">
+        <id column="SHIELDER_ID" property="shielderId"/>
+        <result column="EMPLOYEE_ID" property="employeeId"/>
+        <result column="COMPANY" property="company"/>
+        <result column="NAME" property="name"/>
+        <result column="COUNTRY_CODE" property="countryCode"/>
+        <result column="MOBILE" property="mobile"/>
+        <result column="EMAILID" property="emailId"/>
+        <result column="STATUS_ID" property="statusId"/>
+    </resultMap>
+
+
+    <insert id="addEmployee" parameterType="com.om.springboot.model.user.Employee">
+        INSERT INTO EMPLOYEE(SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,EMAILID,STATUS_ID)
+        VALUES
+        (#{shielderId},#{employeeId},#{company},#{name},#{countryCode},#{mobile},#{emailId},#{statusId})
+    </insert>
+
+    <select id="getMaxShieldId" resultType="String">
+        SELECT MAX(SHIELDER_ID) FROM EMPLOYEE ;
+    </select>
+
+    <select id="getEmployee" resultMap="EmployeeProfileResultMap">
+        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,EMAILID,STATUS_ID
+        FROM
+        EMPLOYEE
+        WHERE
+        MOBILE=#{mobile};
+    </select>
+
+    <select id="getAllEmployee" resultMap="EmployeeProfileResultMap">
+        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,EMAILID,STATUS_ID
+        FROM
+        EMPLOYEE
+        WHERE
+        COMPANY=#{company};
+    </select>
+
+    <select id="existByMobile" resultType="Boolean">
+        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,EMAILID,STATUS_ID
+        FROM
+        EMPLOYEE
+        WHERE
+        MOBILE=#{mobile};
+    </select>
+</mapper>

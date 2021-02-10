@@ -2,11 +2,13 @@ package com.om.springboot.controller.ui.user;
 
 import com.om.springboot.controller.request.AddEmployeeRequest;
 import com.om.springboot.controller.request.BusinessProfileRequest;
-import com.om.springboot.dto.model.user.AdminDto;
-import com.om.springboot.dto.model.user.BusinessProfileDto;
-import com.om.springboot.dto.model.user.EmployeeDto;
-import com.om.springboot.dto.model.user.UserAuthenticationDto;
+import com.om.springboot.controller.request.OtpRequest;
+import com.om.springboot.dto.model.user.*;
 import com.om.springboot.dto.response.ApiResponse;
+import com.om.springboot.dto.response.OtpResponse;
+import com.om.springboot.dto.response.user.EmployeeRequest;
+import com.om.springboot.dto.response.user.EmployeeResponse;
+import com.om.springboot.model.user.StatusMaster;
 import com.om.springboot.service.user.*;
 import com.om.springboot.util.AppConstants;
 import com.om.springboot.util.ErrorConstants;
@@ -16,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -33,6 +37,12 @@ public class BusinessProfileController {
 
     @Autowired
     EmployeeService employeeService;
+
+    @Autowired
+    StatusMasterService statusMasterService;
+
+    @Autowired
+    OtpService otpService;
 
     @CrossOrigin
     @PostMapping("/postLogin/businessProfileRegisteration")
@@ -72,7 +82,7 @@ public class BusinessProfileController {
         if (AppConstants.ANOTHER_ADMIN == isAdmin) {
             String anotherMobileNumber = businessProfileRequest.getAnotherAdminMobileNumber();
 
-            Boolean isAlreadyExist = adminService.existByMobileNumberAndCompany(anotherMobileNumber, company);
+            Boolean isAlreadyExist = adminService.adminByMobileNumberAndCompany(anotherMobileNumber, company);
             if (isAlreadyExist) {
                 return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E103.name()), HttpStatus.OK);
             }
@@ -81,7 +91,7 @@ public class BusinessProfileController {
                     .setAdminEmailId(businessProfileRequest.getAnotherAdminEmailId());
             adminDto.setAdminMobileNumber(anotherMobileNumber);
             adminDto.setCompany(businessProfileRequest.getCompany());
-            adminDto.setUserId(null);
+
             Boolean isAdminInserted = adminService.insertAdmin(adminDto);
             if (null == isAdminInserted || !isAdminInserted) {
                 return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E102.name()), HttpStatus.OK);
@@ -90,7 +100,7 @@ public class BusinessProfileController {
         }
         if (AppConstants.SELF_ADMIN == isAdmin) {
 
-            Boolean isAlreadyExist = adminService.existByMobileNumberAndCompany(mobileNumber, company);
+            Boolean isAlreadyExist = adminService.adminByMobileNumberAndCompany(mobileNumber, company);
             if (isAlreadyExist) {
                 return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E103.name()), HttpStatus.OK);
             }
@@ -99,7 +109,6 @@ public class BusinessProfileController {
             String name = businessProfileRequest.getFirstName() + " " + businessProfileRequest.getLastName();
             adminDto.setAdminName(name)
                     .setAdminEmailId(businessProfileRequest.getEmailId());
-            adminDto.setUserId(userId);
             adminDto.setAdminMobileNumber(mobileNumber);
             adminDto.setCompany(businessProfileRequest.getCompany());
             Boolean isAdminInserted = adminService.insertAdmin(adminDto);
@@ -119,34 +128,105 @@ public class BusinessProfileController {
     @PostMapping("/postLogin/addEmployee")
     public ResponseEntity<?> addEmployee(@Valid @RequestBody AddEmployeeRequest addEmployeeRequest) {
         String adminMobileNumber = addEmployeeRequest.getAdminMobileNumber();
-        Boolean isExist = businessProfileService.existByMobileNumber(adminMobileNumber);
-        if (null == isExist || !isExist) {
-            return new ResponseEntity(new ApiResponse(true, ErrorConstants.E109.name()), HttpStatus.OK);
+
+        AdminDto adminDto = adminService.getAdminDetails(adminMobileNumber);
+        if (null == adminDto) {
+            return new ResponseEntity(new ApiResponse(false, ErrorConstants.E110.name()), HttpStatus.OK);
         }
-        UserAuthenticationDto userAuthenticationDto=userAuthenticationService.checkAuthentication(adminMobileNumber);
-        if(null==userAuthenticationDto)
-        {
-            return new ResponseEntity<>(new ApiResponse(false,ErrorConstants.E108.name()),HttpStatus.OK);
+
+        String company = adminDto.getCompany();
+
+        UserAuthenticationDto userAuthenticationDto = userAuthenticationService.checkAuthentication(adminMobileNumber);
+        if (null == userAuthenticationDto) {
+            return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E108.name()), HttpStatus.OK);
         }
-        int isLoggedIN=userAuthenticationDto.getIsLoggedIn();
-        if(isLoggedIN==AppConstants.LOGIN){
-            EmployeeDto employeeDto=new EmployeeDto();
+
+        int isLoggedIN = userAuthenticationDto.getIsLoggedIn();
+
+        if (isLoggedIN == AppConstants.LOGIN) {
+            Boolean isEmployeePresent = employeeService.existByMobile(addEmployeeRequest.getMobileNumber());
+            if (isEmployeePresent) {
+                return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E112.name()), HttpStatus.OK);
+            }
+            StatusMasterDto statusMasterDto = statusMasterService.getStatusFromMaster(AppConstants.UPLOAD);
+            EmployeeDto employeeDto = new EmployeeDto();
             employeeDto.setEmployeeId(addEmployeeRequest.getEmployeeId())
                     .setName(addEmployeeRequest.getName())
                     .setEmailId(addEmployeeRequest.getEmailId())
                     .setCountryCode(addEmployeeRequest.getCountryCode())
-                    .setMobileNumber(addEmployeeRequest.getMobileNumber());
-            Boolean isAdded=employeeService.addEmployeeDetails(employeeDto);
-            if(isAdded){
+                    .setMobileNumber(addEmployeeRequest.getMobileNumber())
+                    .setStatusId(statusMasterDto.getStatusId())
+                    .setCompany(company);
+            System.out.println("Employee Profile " + employeeDto);
 
+            Boolean isUploaded = employeeService.addEmployeeDetails(employeeDto);
+
+            if (isUploaded) {
+
+                return new ResponseEntity<>(new ApiResponse(true, "Uploaded"), HttpStatus.OK);
+
+            } else {
+                return new ResponseEntity(new ApiResponse(false, ErrorConstants.E111.name()), HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity(new ApiResponse(false, ErrorConstants.E108.name()), HttpStatus.OK);
         }
-        else {
-            return new ResponseEntity(new ApiResponse(true, ErrorConstants.E108.name()), HttpStatus.OK);
-        }
-
     }
 
+    @CrossOrigin
+    @GetMapping("/postLogin/getEmployee/{adminMobileNumber}")
+    public ResponseEntity<?> getEmployee(@PathVariable String adminMobileNumber) {
+        AdminDto adminDto = adminService.getAdminDetails(adminMobileNumber);
 
+        if (null == adminDto) {
+            return new ResponseEntity(new ApiResponse(false, ErrorConstants.E110.name()), HttpStatus.OK);
+        }
+        String company = adminDto.getCompany();
+
+        EmployeeRequest employeeRequest = new EmployeeRequest();
+        EmployeeResponse employeeResponse = new EmployeeResponse(true, "");
+        List<EmployeeRequest> finalList = new ArrayList<>();
+
+        List<EmployeeDto> employeeDtoList = employeeService.getAllEmployeeDetails(company);
+        if (null == employeeDtoList || employeeDtoList.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E113.name()), HttpStatus.OK);
+        }
+        System.out.println(employeeDtoList);
+
+        for (EmployeeDto employeeDto1 : employeeDtoList) {
+            StatusMasterDto statusMasterDto = statusMasterService.getStatusById(employeeDto1.getStatusId());
+            String mobile = employeeDto1.getCountryCode() + " " + employeeDto1.getMobileNumber();
+
+            employeeRequest.setEmployeeId(employeeDto1.getEmployeeId())
+                    .setName(employeeDto1.getName())
+                    .setEmailId(employeeDto1.getEmailId())
+                    .setMobileNumber(mobile)
+                    .setShielderId(employeeDto1.getShielderId())
+                    .setStatus(statusMasterDto.getStatus());
+            finalList.add(employeeRequest);
+        }
+        employeeResponse.setEmployeeRequests(finalList);
+        return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PostMapping("/postLogin/sendOtp")
+    public ResponseEntity sendOtp(@Valid @RequestBody OtpRequest otpRequest) {
+        String otp = null;
+        String mobileNumber = otpRequest.getMobileNumber();
+        OtpResponse otpResponse = new OtpResponse(true, "");
+        Boolean isExist = otpService.otpExistByMobileNumber(mobileNumber);
+        if (!isExist) {
+            otp = otpService.insertOtp(mobileNumber);
+        } else if (isExist) {
+            otp = otpService.updateOtp(mobileNumber);
+            if (otp == null) {
+                return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E104.name()), HttpStatus.OK);
+            }
+        }
+        otpResponse.setMobileNumber(mobileNumber).setOtp(otp);
+        return new ResponseEntity<>(otpResponse, HttpStatus.OK);
+    }
 }
+
 

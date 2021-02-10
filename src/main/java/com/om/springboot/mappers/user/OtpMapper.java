@@ -10,4 +10,5 @@ public interface OtpMapper {
     Boolean existByMobile(String mobileNumber);
     Otp getOtpDetails(String mobileNumber);
 
+    Boolean updateOtpWRC(Otp otp);
 }

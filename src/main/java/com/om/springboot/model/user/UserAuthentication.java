@@ -15,7 +15,7 @@ public class UserAuthentication extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Long userId;
+    Long adminId;
     String mobile;
     int isLoggedIn;
     String otp;
