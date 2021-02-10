@@ -8,6 +8,6 @@ public interface EmployeeService {
     Boolean addEmployeeDetails(EmployeeDto employeeDto);
      List<EmployeeDto> getAllEmployeeDetails(String company);
     EmployeeDto getEmployeeDetails(String mobileNumber);
-
+    Boolean updateOtpVerify(EmployeeDto employeeDto);
     Boolean existByMobile(String mobileNumber);
 }

@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Setter
 @Entity
 @Table(name = "employee", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"SHIELDER_ID", "EMPLOYEE_ID", "MOBILE"
+        @UniqueConstraint(columnNames = {"SHIELDER_ID", "MOBILE"
         })
 })
 public class Employee extends DateAudit {
@@ -47,4 +47,8 @@ public class Employee extends DateAudit {
 
     @NotNull
     private int statusId;
+
+    private int otpVerified;
+
+
 }

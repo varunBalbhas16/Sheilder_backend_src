@@ -82,9 +82,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/auth/**","/test1/**","/api/shielder/postLogin/businessProfileRegisteration/**","/api/shielder/login/otp/**",
-                        "/api/shielder/login/validateOtp/**","/api/shielder/postLogin/addEmployee","/api/shielder/postLogin/getEmployee/{adminMobileNumber}",
-                        "/api/shielder/postLogin/sendOtp","/api/shielder/logout")
+                .antMatchers("/api/auth/**","/test1/**","/api/safeAccess/postLogin/businessProfileRegisteration/**","/api/safeAccess/login/otp/**",
+                        "/api/safeAccess/login/validateOtp/**","/api/safeAccess/postLogin/addEmployee","/api/safeAccess/postLogin/getEmployee/{adminMobileNumber}",
+                        "/api/safeAccess/postLogin/sendOtp","/api/safeAccess/logout","/api/safeAccess/postLogin/sendEmpOtp","/api/safeAccess/postLogin/validateEmpOtp",
+                        "/api/safeAccess/postLogin/uploadEmployee")
                 .permitAll()
                 .antMatchers("/test/**","/api/auth/**","/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()

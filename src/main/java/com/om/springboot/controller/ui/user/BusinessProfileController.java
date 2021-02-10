@@ -3,6 +3,7 @@ package com.om.springboot.controller.ui.user;
 import com.om.springboot.controller.request.AddEmployeeRequest;
 import com.om.springboot.controller.request.BusinessProfileRequest;
 import com.om.springboot.controller.request.OtpRequest;
+import com.om.springboot.controller.request.auth.ValidateOtpRequest;
 import com.om.springboot.dto.model.user.*;
 import com.om.springboot.dto.response.ApiResponse;
 import com.om.springboot.dto.response.OtpResponse;
@@ -23,7 +24,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/shielder")
+@RequestMapping("/api/safeAccess")
 public class BusinessProfileController {
 
     @Autowired
@@ -32,17 +33,6 @@ public class BusinessProfileController {
     @Autowired
     AdminService adminService;
 
-    @Autowired
-    UserAuthenticationService userAuthenticationService;
-
-    @Autowired
-    EmployeeService employeeService;
-
-    @Autowired
-    StatusMasterService statusMasterService;
-
-    @Autowired
-    OtpService otpService;
 
     @CrossOrigin
     @PostMapping("/postLogin/businessProfileRegisteration")
@@ -123,110 +113,4 @@ public class BusinessProfileController {
         }
 
     }
-
-    @CrossOrigin
-    @PostMapping("/postLogin/addEmployee")
-    public ResponseEntity<?> addEmployee(@Valid @RequestBody AddEmployeeRequest addEmployeeRequest) {
-        String adminMobileNumber = addEmployeeRequest.getAdminMobileNumber();
-
-        AdminDto adminDto = adminService.getAdminDetails(adminMobileNumber);
-        if (null == adminDto) {
-            return new ResponseEntity(new ApiResponse(false, ErrorConstants.E110.name()), HttpStatus.OK);
-        }
-
-        String company = adminDto.getCompany();
-
-        UserAuthenticationDto userAuthenticationDto = userAuthenticationService.checkAuthentication(adminMobileNumber);
-        if (null == userAuthenticationDto) {
-            return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E108.name()), HttpStatus.OK);
-        }
-
-        int isLoggedIN = userAuthenticationDto.getIsLoggedIn();
-
-        if (isLoggedIN == AppConstants.LOGIN) {
-            Boolean isEmployeePresent = employeeService.existByMobile(addEmployeeRequest.getMobileNumber());
-            if (isEmployeePresent) {
-                return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E112.name()), HttpStatus.OK);
-            }
-            StatusMasterDto statusMasterDto = statusMasterService.getStatusFromMaster(AppConstants.UPLOAD);
-            EmployeeDto employeeDto = new EmployeeDto();
-            employeeDto.setEmployeeId(addEmployeeRequest.getEmployeeId())
-                    .setName(addEmployeeRequest.getName())
-                    .setEmailId(addEmployeeRequest.getEmailId())
-                    .setCountryCode(addEmployeeRequest.getCountryCode())
-                    .setMobileNumber(addEmployeeRequest.getMobileNumber())
-                    .setStatusId(statusMasterDto.getStatusId())
-                    .setCompany(company);
-            System.out.println("Employee Profile " + employeeDto);
-
-            Boolean isUploaded = employeeService.addEmployeeDetails(employeeDto);
-
-            if (isUploaded) {
-
-                return new ResponseEntity<>(new ApiResponse(true, "Uploaded"), HttpStatus.OK);
-
-            } else {
-                return new ResponseEntity(new ApiResponse(false, ErrorConstants.E111.name()), HttpStatus.OK);
-            }
-        } else {
-            return new ResponseEntity(new ApiResponse(false, ErrorConstants.E108.name()), HttpStatus.OK);
-        }
-    }
-
-    @CrossOrigin
-    @GetMapping("/postLogin/getEmployee/{adminMobileNumber}")
-    public ResponseEntity<?> getEmployee(@PathVariable String adminMobileNumber) {
-        AdminDto adminDto = adminService.getAdminDetails(adminMobileNumber);
-
-        if (null == adminDto) {
-            return new ResponseEntity(new ApiResponse(false, ErrorConstants.E110.name()), HttpStatus.OK);
-        }
-        String company = adminDto.getCompany();
-
-        EmployeeRequest employeeRequest = new EmployeeRequest();
-        EmployeeResponse employeeResponse = new EmployeeResponse(true, "");
-        List<EmployeeRequest> finalList = new ArrayList<>();
-
-        List<EmployeeDto> employeeDtoList = employeeService.getAllEmployeeDetails(company);
-        if (null == employeeDtoList || employeeDtoList.isEmpty()) {
-            return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E113.name()), HttpStatus.OK);
-        }
-        System.out.println(employeeDtoList);
-
-        for (EmployeeDto employeeDto1 : employeeDtoList) {
-            StatusMasterDto statusMasterDto = statusMasterService.getStatusById(employeeDto1.getStatusId());
-            String mobile = employeeDto1.getCountryCode() + " " + employeeDto1.getMobileNumber();
-
-            employeeRequest.setEmployeeId(employeeDto1.getEmployeeId())
-                    .setName(employeeDto1.getName())
-                    .setEmailId(employeeDto1.getEmailId())
-                    .setMobileNumber(mobile)
-                    .setShielderId(employeeDto1.getShielderId())
-                    .setStatus(statusMasterDto.getStatus());
-            finalList.add(employeeRequest);
-        }
-        employeeResponse.setEmployeeRequests(finalList);
-        return new ResponseEntity<>(employeeResponse, HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @PostMapping("/postLogin/sendOtp")
-    public ResponseEntity sendOtp(@Valid @RequestBody OtpRequest otpRequest) {
-        String otp = null;
-        String mobileNumber = otpRequest.getMobileNumber();
-        OtpResponse otpResponse = new OtpResponse(true, "");
-        Boolean isExist = otpService.otpExistByMobileNumber(mobileNumber);
-        if (!isExist) {
-            otp = otpService.insertOtp(mobileNumber);
-        } else if (isExist) {
-            otp = otpService.updateOtp(mobileNumber);
-            if (otp == null) {
-                return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E104.name()), HttpStatus.OK);
-            }
-        }
-        otpResponse.setMobileNumber(mobileNumber).setOtp(otp);
-        return new ResponseEntity<>(otpResponse, HttpStatus.OK);
-    }
 }
-
-

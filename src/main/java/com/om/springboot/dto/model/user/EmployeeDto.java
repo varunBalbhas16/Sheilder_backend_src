@@ -41,4 +41,8 @@ public class EmployeeDto {
     private String company;
     @NotNull
     private int statusId;
+
+    private int otpVerified;
+
+
 }

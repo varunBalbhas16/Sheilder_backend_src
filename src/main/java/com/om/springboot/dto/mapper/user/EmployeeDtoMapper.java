@@ -17,8 +17,8 @@ public class EmployeeDtoMapper {
                 .setMobileNumber(employee.getMobile())
                 .setEmailId(employee.getEmailId())
                 .setCompany(employee.getCompany())
-                .setStatusId(employee.getStatusId());
-
+                .setStatusId(employee.getStatusId())
+                .setOtpVerified(employee.getOtpVerified());
     }
 
     public static List<EmployeeDto> toDtoList(List<Employee> allEmployee) {

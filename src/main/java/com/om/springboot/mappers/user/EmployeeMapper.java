@@ -17,4 +17,6 @@ public interface EmployeeMapper {
     List<Employee> getAllEmployee(String company);
 
     Boolean existByMobile(String mobileNumber);
+
+    Boolean updateOtpVerify(Employee employee);
 }

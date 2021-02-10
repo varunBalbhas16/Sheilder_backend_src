@@ -14,7 +14,8 @@ public enum ErrorConstants {
     E111("Details failed to upload"),
     E112("Employee already registered"),
     E113("Add employees and proceed"),
-    E114("You are not logged out.Log out and try Log in");
+    E114("You are not logged out.Log out and try Log in"),
+    E115("This Employee is already added and verified" );
 
 
     private String value;

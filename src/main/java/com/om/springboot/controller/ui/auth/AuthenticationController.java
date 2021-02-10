@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/shielder")
+@RequestMapping("/api/safeAccess")
 public class AuthenticationController {
 
     @Autowired
@@ -41,20 +41,22 @@ public class AuthenticationController {
         Boolean isExist = otpService.otpExistByMobileNumber(mobileNumber);
         if (isExist) {
             UserAuthenticationDto userAuthenticationDto = userAuthenticationService.checkAuthentication(mobileNumber);
-            int logStatus = userAuthenticationDto.getIsLoggedIn();
-            if (logStatus == AppConstants.LOGOUT){
-                otp = otpService.updateOtpWRC(mobileNumber);
+            if (null != userAuthenticationDto) {
+                int logStatus = userAuthenticationDto.getIsLoggedIn();
+                if (logStatus == AppConstants.LOGOUT) {
+                    otp = otpService.updateOtpWRC(mobileNumber);
+                } else {
+                    return new ResponseEntity<>(new ApiResponse(false, ErrorConstants.E114.name()), HttpStatus.OK);
+                }
             }
-            else{
-                return new ResponseEntity<>(new ApiResponse(false,ErrorConstants.E114.name()),HttpStatus.OK);
-            }
-        }
-        else {
+        } else {
             otp = otpService.insertOtp(mobileNumber);
         }
         otpResponse.setMobileNumber(mobileNumber).setOtp(otp);
-
-        return new ResponseEntity<>(otpResponse, HttpStatus.OK);
+        if (otp != null) {
+            return new ResponseEntity<>(otpResponse, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ApiResponse(false,ErrorConstants.E106.name()),HttpStatus.OK);
     }
 
     @CrossOrigin

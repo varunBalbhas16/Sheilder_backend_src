@@ -29,6 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setName(employeeDto.getName());
         employee.setStatusId(employeeDto.getStatusId());
         employee.setCompany(employeeDto.getCompany());
+        employee.setOtpVerified(employeeDto.getOtpVerified());
         String shieldId = this.getMaxShieldId();
         if (null == shieldId) {
             shieldId = AppConstants.EMPLOYEE_SHIELDER_ID;
@@ -59,6 +60,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Boolean existByMobile(String mobileNumber){
         Boolean isExist=employeeMapper.existByMobile(mobileNumber);
         if(null==isExist || !isExist){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    @Override
+    public Boolean updateOtpVerify(EmployeeDto employeeDto){
+        Employee employee=new Employee();
+        employee.setOtpVerified(employeeDto.getOtpVerified());
+        employee.setStatusId(employeeDto.getStatusId());
+        employee.setShielderId(employeeDto.getShielderId());
+        Boolean isUpdated=employeeMapper.updateOtpVerify(employee);
+        if(null==isUpdated || !isUpdated){
             return false;
         }
         else {

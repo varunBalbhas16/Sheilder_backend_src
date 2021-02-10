@@ -12,13 +12,16 @@
         <result column="MOBILE" property="mobile"/>
         <result column="EMAILID" property="emailId"/>
         <result column="STATUS_ID" property="statusId"/>
+        <result column="OTP_VERIFIED" property="otpVerified"/>
     </resultMap>
 
 
     <insert id="addEmployee" parameterType="com.om.springboot.model.user.Employee">
-        INSERT INTO EMPLOYEE(SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,EMAILID,STATUS_ID)
+        INSERT INTO EMPLOYEE(SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,
+        EMAILID,STATUS_ID,OTP_VERIFIED)
         VALUES
-        (#{shielderId},#{employeeId},#{company},#{name},#{countryCode},#{mobile},#{emailId},#{statusId})
+        (#{shielderId},#{employeeId},#{company},#{name},#{countryCode},#{mobile},#{emailId},#{statusId},
+        #{otpVerified})
     </insert>
 
     <select id="getMaxShieldId" resultType="String">
@@ -26,7 +29,8 @@
     </select>
 
     <select id="getEmployee" resultMap="EmployeeProfileResultMap">
-        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,EMAILID,STATUS_ID
+        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,
+        EMAILID,STATUS_ID,OTP_VERIFIED
         FROM
         EMPLOYEE
         WHERE
@@ -34,7 +38,8 @@
     </select>
 
     <select id="getAllEmployee" resultMap="EmployeeProfileResultMap">
-        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,EMAILID,STATUS_ID
+        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,
+        EMAILID,STATUS_ID,OTP_VERIFIED
         FROM
         EMPLOYEE
         WHERE
@@ -42,10 +47,20 @@
     </select>
 
     <select id="existByMobile" resultType="Boolean">
-        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,EMAILID,STATUS_ID
+        SELECT SHIELDER_ID,EMPLOYEE_ID,COMPANY,NAME,COUNTRY_CODE,MOBILE,
+        EMAILID,STATUS_ID,OTP_VERIFIED
         FROM
         EMPLOYEE
         WHERE
         MOBILE=#{mobile};
     </select>
+
+    <update id="updateOtpVerify" parameterType="com.om.springboot.model.user.Employee">
+        UPDATE EMPLOYEE
+        SET
+        OTP_VERIFIED=#{otpVerified},
+        STATUS_ID=#{statusId}
+        WHERE
+        SHIELDER_ID=#{shielderId};
+    </update>
 </mapper>

@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EmployeeRequest {
-    private String shielderId;
+    private String safeAccessId;
     private String employeeId;
     private String name;
     private String mobileNumber;
