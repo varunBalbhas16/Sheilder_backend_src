@@ -9,13 +9,14 @@ import com.om.springboot.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import static com.om.springboot.exception.EntityType.TESTUSER;
 import static com.om.springboot.exception.EntityType.USER;
 import static com.om.springboot.exception.ExceptionType.DUPLICATE_ENTITY;
 import static com.om.springboot.exception.ExceptionType.ENTITY_NOT_FOUND;
 
-@Component
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired

@@ -1,0 +1,23 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.user.BlockMapper">
+    <resultMap id="BlockResultMap" type="com.om.springboot.model.user.Block">
+        <id column="ID" property="id"/>
+        <result column="SAFEACCESS_ID" property="safeAccessId"/>
+        <result column="BLOCK_NAME" property="blockName"/>
+        <result column="BLOCK_NUMBER" property="blockNumber"/>
+        <result column="FACILITY_ID" property="facilityId"/>
+        <result column="FACILITY_NAME" property="facilityName"/>
+        <result column="COMPANY" property="company"/>
+
+    </resultMap>
+
+    <insert id="addBlock" parameterType="com.om.springboot.model.user.Block">
+        INSERT INTO
+        BLOCK(ID,SAFEACCESS_ID,BLOCK_NAME,BLOCK_NUMBER,FACILITY_ID,FACILITY_NAME,COMPANY)
+        VALUES
+        (#{id},#{safeAccessId},#{blockName},#{blockNumber},#{facilityId},#{facilityName},#{company});
+    </insert>
+</mapper>

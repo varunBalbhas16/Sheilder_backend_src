@@ -1,0 +1,53 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.user.FacilityMapper">
+    <resultMap id="FacilityResultMap" type="com.om.springboot.model.user.Facility">
+        <id column="ID" property="id"/>
+        <result column="SAFEACCESS_ID" property="safeAccessId"/>
+        <result column="FACILITY_NAME" property="facilityName"/>
+        <result column="FACILITY_ADDRESS" property="facilityAddress"/>
+        <result column="COMPANY" property="company"/>
+        <result column="INCHARGE" property="inCharge"/>
+        <result column="COUNTRY_CODE" property="countryCode"/>
+        <result column="MOBILE" property="mobile"/>
+
+    </resultMap>
+
+    <insert id="addFacility" parameterType="com.om.springboot.model.user.Facility">
+        INSERT INTO FACILITY(ID,SAFEACCESS_ID,FACILITY_NAME,FACILITY_ADDRESS,COMPANY,INCHARGE,COUNTRY_CODE,MOBILE)
+        VALUES
+        (#{id},#{safeAccessId},#{facilityName},#{facilityAddress},#{company},#{inCharge},#{countryCode},#{mobile})
+    </insert>
+
+    <select id="getFacilityByCompany" resultMap="FacilityResultMap">
+        SELECT ID,SAFEACCESS_ID,FACILITY_NAME,FACILITY_ADDRESS,COMPANY,INCHARGE,COUNTRY_CODE,MOBILE
+        FROM
+        FACILITY
+        WHERE
+        COMPANY=#{company};
+    </select>
+
+    <select id="existByFacilityAndCompany" resultType="Boolean">
+        SELECT ID,SAFEACCESS_ID,FACILITY_NAME,FACILITY_ADDRESS,COMPANY,INCHARGE,COUNTRY_CODE,MOBILE
+        FROM
+        FACILITY
+        WHERE
+        FACILITY_NAME=#{facilityName}
+        AND
+        COMPANY=#{company};
+    </select>
+
+    <select id="getByFacilityAndCompany" resultMap="FacilityResultMap">
+        SELECT ID,SAFEACCESS_ID,FACILITY_NAME,FACILITY_ADDRESS,COMPANY,INCHARGE,COUNTRY_CODE,MOBILE
+        FROM
+        FACILITY
+        WHERE
+        FACILITY_NAME=#{facilityName}
+        AND
+        COMPANY=#{company};
+    </select>
+
+
+</mapper>

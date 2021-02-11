@@ -85,7 +85,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/**","/test1/**","/api/safeAccess/postLogin/businessProfileRegisteration/**","/api/safeAccess/login/otp/**",
                         "/api/safeAccess/login/validateOtp/**","/api/safeAccess/postLogin/addEmployee","/api/safeAccess/postLogin/getEmployee/{adminMobileNumber}",
                         "/api/safeAccess/postLogin/sendOtp","/api/safeAccess/logout","/api/safeAccess/postLogin/sendEmpOtp","/api/safeAccess/postLogin/validateEmpOtp",
-                        "/api/safeAccess/postLogin/uploadEmployee")
+                        "/api/safeAccess/postLogin/uploadEmployee","/api/safeAccess/countries","/api/safeAccess/postLogin/addFacility","/api/safeAccess/postLogin/getFacility/{adminMobileNumber}",
+                        "/api/safeAccess/postLogin/addBlock")
                 .permitAll()
                 .antMatchers("/test/**","/api/auth/**","/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()

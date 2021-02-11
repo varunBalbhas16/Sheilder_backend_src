@@ -6,6 +6,7 @@ import com.om.springboot.service.otpIntegration.TimeBasedOneTimePasswordGenerato
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.transaction.Transactional;
@@ -13,7 +14,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-@Component
+@Service
 public class OtpServiceImpl implements OtpService {
     @Autowired
     @Qualifier("otpMapper")

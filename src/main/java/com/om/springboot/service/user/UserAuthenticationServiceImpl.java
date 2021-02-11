@@ -7,10 +7,11 @@ import com.om.springboot.model.user.UserAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
-@Component
+@Service
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
     @Autowired
     @Qualifier("userAuthenticationMapper")

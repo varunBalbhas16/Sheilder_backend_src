@@ -4,20 +4,26 @@ import com.om.springboot.dto.mapper.user.EmployeeDtoMapper;
 import com.om.springboot.dto.model.user.EmployeeDto;
 import com.om.springboot.mappers.user.EmployeeMapper;
 import com.om.springboot.model.user.Employee;
+import com.om.springboot.model.user.SafeAccess;
+import com.om.springboot.service.Application.SafeAccessServiceImpl;
 import com.om.springboot.util.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Component
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     @Qualifier("employeeMapper")
     EmployeeMapper employeeMapper;
+
+    @Autowired
+    SafeAccessServiceImpl safeAccessService;
 
     @Override
     public Boolean addEmployeeDetails(EmployeeDto employeeDto) {
@@ -30,12 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStatusId(employeeDto.getStatusId());
         employee.setCompany(employeeDto.getCompany());
         employee.setOtpVerified(employeeDto.getOtpVerified());
-        String shieldId = this.getMaxShieldId();
-        if (null == shieldId) {
-            shieldId = AppConstants.EMPLOYEE_SHIELDER_ID;
-        } else {
-            shieldId = this.getMaxShieldId();
-        }
+        String shieldId = safeAccessService.getSafeAccessId();
 
         employee.setShielderId(shieldId);
         Boolean isAdded = employeeMapper.addEmployee(employee);
@@ -82,14 +83,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    @Transactional
-    public synchronized String getMaxShieldId() {
-        String shieldId = employeeMapper.getMaxShieldId();
-        if (null == shieldId || shieldId.isEmpty()) {
-            return null;
-        }
-        Long id=Long.parseLong(shieldId);
-        id+=1L;
-        return id.toString();
-    }
+
 }

@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.user.SafeAccessMapper">
+    <resultMap id="SafeAccessResultMap" type="com.om.springboot.model.user.SafeAccess">
+        <id column="SAFEACCESS_ID" property="safeAccessId"/>
+    </resultMap>
+
+    <select id="getSafeAccessId" resultType="String">
+        SELECT MAX(SAFEACCESS_ID) FROM SAFE_ACCESS;
+    </select>
+
+    <insert id="insertSafeAccessId" parameterType="com.om.springboot.model.user.SafeAccess">
+        INSERT  INTO SAFE_ACCESS(SAFEACCESS_Id)
+        VALUES(#{safeAccessId})
+    </insert>
+
+</mapper>
